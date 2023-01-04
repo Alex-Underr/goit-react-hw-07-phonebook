@@ -1,0 +1,19 @@
+.input {
+  display: inline-block;
+  padding: 4px;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  border-radius: 4px;
+  background: linear-gradient(
+    to right,
+    #b294ff95,
+    #57e6e660,
+    #feffb860,
+    #57e6e660,
+    #b294ff60,
+    #57e6e660
+  );
+  background-size: 500% auto;
+  margin-bottom: 10px;
+}

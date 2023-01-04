@@ -2,14 +2,14 @@ import PropTypes from 'prop-types';
 import styles from './contactList.module.css';
 import { deleteContact } from 'redux/operations/contactsOperations';
 import { useDispatch } from 'react-redux';
+
 export default function ContactList({ contacts }) {
   const dispatch = useDispatch();
-
   return (
     <ul>
       {contacts.map(({ id, name, phone, avatar }) => (
-        <>
-          <li className={styles.list} key={id} id={id}>
+        <li key={id}>
+          <div className={styles.list} id={id}>
             {avatar && (
               <img
                 src={avatar}
@@ -33,9 +33,9 @@ export default function ContactList({ contacts }) {
             >
               Delete
             </button>
-          </li>
+          </div>
           <hr style={{ padding: 0 }} />
-        </>
+        </li>
       ))}
     </ul>
   );
