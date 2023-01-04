@@ -1,12 +1,12 @@
 .form {
   display: flex;
   flex-direction: column;
-  width: 250px;
   text-align: center;
   margin-top: 10px;
   margin-bottom: 20px;
 }
 .input {
+  min-width: 420px;
 }
 .label {
   display: flex;

@@ -1,9 +1,10 @@
 .list {
   display: flex;
+  padding-top: 7px;
+  align-items: center;
+  gap: 10px;
   justify-content: space-between;
-  margin-bottom: 8px;
 }
-
 .btn {
   align-self: center;
   background-color: #fff;
@@ -42,6 +43,4 @@
 
 .btn:focus {
   box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 4px -6px;
-}
-.form {
 }

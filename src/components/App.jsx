@@ -2,49 +2,69 @@ import ContactForm from './ContactForm/ContactForm';
 import ContactList from './ContactList/ContactList';
 import Filter from './Filter/Filter';
 import styles from './form.module.css';
-import { useEffect, useState } from 'react';
+import { ScaleLoader } from 'react-spinners';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact, fetchContacts } from 'redux/operations/contactsOperations';
 
-const useLocalStorage = (key, defaultValue) => {
-  const [state, setState] = useState(() => {
-    return JSON.parse(window.localStorage.getItem(key)) ?? defaultValue;
-  });
+import {
+  selectIsLoading,
+  selectFetchContacts,
+  selectError,
+  selectFilter,
+} from 'redux/selectors/selectors';
 
-  useEffect(() => {
-    window.localStorage.setItem(key, JSON.stringify(state));
-  }, [key, setState, state]);
-  return [state, setState];
+const override = {
+  position: 'fixed',
+  top: '45%',
+  left: '50%',
+  transform: 'translateX(-50%) translateY(-50%)',
 };
-
 export function App() {
-  const [contacts, setContacts] = useLocalStorage('contact', []);
-  const [filter, setFilter] = useState('');
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+  const contacts = useSelector(selectFetchContacts);
+  const filtered = useSelector(selectFilter);
+  const spinner = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
 
   const filteredContacts = () => {
-    const toLower = filter.toLowerCase();
-    return contacts.filter(i => i.name.toLowerCase().includes(toLower));
+    if (filtered) {
+      const toLower = filtered.trim().toLowerCase();
+      return contacts.filter(i => i.name.toLowerCase().includes(toLower));
+    } else return contacts;
   };
 
-  const deleteItem = itemId => {
-    setContacts(contacts.filter(item => item.id !== itemId));
-  };
-
-  const filterNow = event => {
-    setFilter(event.currentTarget.value);
-  };
-
-  const addContact = contact => {
+  const addingContact = contact => {
     contacts.some(e => e.name === contact.name)
       ? alert(`${contact.name} is already in contacts`)
-      : setContacts(prevState => [...prevState, contact]);
+      : dispatch(addContact(contact));
   };
 
   return (
     <div className={styles.form}>
-      <h1>Phonebook</h1>
-      <ContactForm onSubmit={addContact} />
-      <h2>Contacts</h2>
-      <Filter value={filter} onChange={filterNow} />
-      <ContactList contacts={filteredContacts()} onClick={deleteItem} />
+      <h1 className={styles.header}>Phonebook</h1>
+      <ContactForm onSubmit={addingContact} />
+      {spinner && (
+        <ScaleLoader
+          color="hsla(175, 100%, 37%, 1)"
+          height={27}
+          margin={4}
+          width={4}
+          cssOverride={override}
+        />
+      )}
+      {error && (
+        <b style={{ color: '#ab0009', textAlign: 'center' }}>{error}</b>
+      )}
+
+      <h3 style={{ fontFamily: 'Lucida Handwriting' }}>Contacts:</h3>
+      <>
+        {contacts.length === 0 ? <p>The contact list is empty</p> : <Filter />}
+      </>
+      <ContactList contacts={filteredContacts()} />
     </div>
   );
 }

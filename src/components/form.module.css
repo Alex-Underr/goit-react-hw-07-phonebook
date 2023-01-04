@@ -1,24 +1,32 @@
 ul,
 p,
 h1,
-h2 {
+h2,
+h3,
+h4,
+h5,
+h6 {
   padding: 5px;
   margin: 0px;
 }
 
 .form {
   display: flex;
-  /* align-items: center; */
   flex-direction: column;
   justify-content: center;
-  width: 310px;
+  width: 510px;
   --background: white;
   --border: rgba(0, 0, 0, 0.125);
   --borderRadius: 1.225rem;
-  background: white;
+  background: rgba(61, 145, 255, 0.133);
   border: 1px solid var(--border);
   border-radius: var(--borderRadius);
   box-shadow: 0 1rem 1rem -0.75rem var(--border);
-  margin: auto;
+  margin: 50px auto 50px auto;
   padding: 2rem;
+}
+.header {
+  text-align: center;
+  font-family: Lucida Handwriting;
+  text-shadow: -2px 3px 9px rgb(0 107 98 / 68%);
 }

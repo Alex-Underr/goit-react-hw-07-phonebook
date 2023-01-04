@@ -1,17 +1,41 @@
 import PropTypes from 'prop-types';
 import styles from './contactList.module.css';
-export default function ContactList({ contacts, onClick }) {
+import { deleteContact } from 'redux/operations/contactsOperations';
+import { useDispatch } from 'react-redux';
+export default function ContactList({ contacts }) {
+  const dispatch = useDispatch();
+
   return (
     <ul>
-      {contacts.map(({ id, name, number }) => (
-        <li className={styles.list} key={id} id={id}>
-          <p>
-            {name} : {number}
-          </p>
-          <button className={styles.btn} onClick={() => onClick(id)}>
-            Delete
-          </button>
-        </li>
+      {contacts.map(({ id, name, phone, avatar }) => (
+        <>
+          <li className={styles.list} key={id} id={id}>
+            {avatar && (
+              <img
+                src={avatar}
+                alt={name}
+                width="50px"
+                style={{ borderRadius: '30%' }}
+              />
+            )}
+            <p
+              style={{
+                fontWeight: 600,
+                fontFamily: 'sans-serif',
+              }}
+            >
+              {name}:
+            </p>
+            <p style={{ fontStyle: 'italic' }}>{phone}</p>
+            <button
+              className={styles.btn}
+              onClick={() => dispatch(deleteContact(id))}
+            >
+              Delete
+            </button>
+          </li>
+          <hr style={{ padding: 0 }} />
+        </>
       ))}
     </ul>
   );
@@ -19,10 +43,10 @@ export default function ContactList({ contacts, onClick }) {
 ContactList.propTypes = {
   contacts: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-      number: PropTypes.string,
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      phone: PropTypes.string.isRequired,
+      avatar: PropTypes.string.isRequired,
     }).isRequired
   ),
-  onClick: PropTypes.func.isRequired,
 };
