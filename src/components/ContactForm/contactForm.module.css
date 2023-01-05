@@ -1,4 +1,6 @@
 .form {
+  max-width: 90%;
+  min-width: 500px;
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -46,7 +48,6 @@
   border-top-left-radius: 255px 15px;
   border-top-right-radius: 15px 225px;
   user-select: none;
-  -webkit-user-select: none;
   touch-action: manipulation;
 }
 

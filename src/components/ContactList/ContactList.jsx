@@ -1,13 +1,21 @@
-import PropTypes from 'prop-types';
 import styles from './contactList.module.css';
 import { deleteContact } from 'redux/operations/contactsOperations';
-import { useDispatch } from 'react-redux';
-
-export default function ContactList({ contacts }) {
+import { useDispatch, useSelector } from 'react-redux';
+import { selectFilter, selectFetchContacts } from 'redux/selectors/selectors';
+export default function ContactList() {
   const dispatch = useDispatch();
+  const filtered = useSelector(selectFilter);
+  const contacts = useSelector(selectFetchContacts);
+  const filteredContacts = () => {
+    if (filtered) {
+      const toLower = filtered.trim().toLowerCase();
+      return contacts.filter(i => i.name.toLowerCase().includes(toLower));
+    } else return contacts;
+  };
+
   return (
     <ul>
-      {contacts.map(({ id, name, phone, avatar }) => (
+      {filteredContacts().map(({ id, name, phone, avatar }) => (
         <li key={id}>
           <div className={styles.list} id={id}>
             {avatar && (
@@ -40,13 +48,3 @@ export default function ContactList({ contacts }) {
     </ul>
   );
 }
-ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      phone: PropTypes.string.isRequired,
-      avatar: PropTypes.string.isRequired,
-    }).isRequired
-  ),
-};

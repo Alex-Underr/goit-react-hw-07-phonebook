@@ -13,3 +13,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+#root {
+  min-height: 100vh;
+  background: linear-gradient(
+    305deg,
+    rgba(90, 205, 207, 0.479) 0%,
+    rgba(162, 111, 207, 0.544) 54%,
+    rgba(253, 187, 45, 0.534) 100%
+  );
+}

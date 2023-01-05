@@ -1,14 +1,30 @@
-import { nanoid } from 'nanoid';
 import styles from './contactForm.module.css';
-import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { NotificationManager } from 'react-notifications';
+import { selectFetchContacts } from 'redux/selectors/selectors';
+import { addContact } from 'redux/operations/contactsOperations';
 
-export default function ContactForm({ onSubmit }) {
+export default function ContactForm() {
+  const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+  const contacts = useSelector(selectFetchContacts);
+  const addingContact = evt => {
+    evt.preventDefault();
+    contacts.some(contact => name === contact.name)
+      ? NotificationManager.info(
+          'Try again 😉',
+          `${evt.name} is already in contacts!`,
+          3500
+        )
+      : dispatch(addContact({ name, phone: number }));
+    setName('');
+    setNumber('');
+  };
 
-  const changeInput = evt => {
-    const { name, value } = evt.target;
+  const changeInput = e => {
+    const { name, value } = e.target;
     switch (name) {
       case 'name':
         setName(value);
@@ -21,15 +37,8 @@ export default function ContactForm({ onSubmit }) {
     }
   };
 
-  const addContact = evt => {
-    evt.preventDefault();
-    onSubmit({ name, number, id: nanoid() });
-    setName('');
-    setNumber('');
-  };
-
   return (
-    <form onSubmit={addContact} className={styles.form}>
+    <form onSubmit={addingContact} className={styles.form}>
       <label className={styles.label}>
         Name:
         <input
@@ -62,7 +71,3 @@ export default function ContactForm({ onSubmit }) {
     </form>
   );
 }
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func,
-};

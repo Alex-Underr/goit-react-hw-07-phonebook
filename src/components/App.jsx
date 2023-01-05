@@ -5,17 +5,13 @@ import styles from './form.module.css';
 import { ScaleLoader } from 'react-spinners';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact, fetchContacts } from 'redux/operations/contactsOperations';
-import {
-  NotificationContainer,
-  NotificationManager,
-} from 'react-notifications';
+import { fetchContacts } from 'redux/operations/contactsOperations';
+import { NotificationContainer } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import {
   selectIsLoading,
   selectFetchContacts,
   selectError,
-  selectFilter,
 } from 'redux/selectors/selectors';
 
 const override = {
@@ -30,28 +26,14 @@ export function App() {
     dispatch(fetchContacts());
   }, [dispatch]);
   const contacts = useSelector(selectFetchContacts);
-  const filtered = useSelector(selectFilter);
   const spinner = useSelector(selectIsLoading);
   const error = useSelector(selectError);
-
-  const filteredContacts = () => {
-    if (filtered) {
-      const toLower = filtered.trim().toLowerCase();
-      return contacts.filter(i => i.name.toLowerCase().includes(toLower));
-    } else return contacts;
-  };
-
-  const addingContact = contact => {
-    contacts.some(e => e.name === contact.name)
-      ? NotificationManager.info(`${contact.name} is already in contacts`)
-      : dispatch(addContact(contact));
-  };
 
   return (
     <div className={styles.formBack}>
       <div className={styles.form}>
         <h1 className={styles.header}>Phonebook</h1>
-        <ContactForm onSubmit={addingContact} />
+        <ContactForm />
         {spinner && (
           <ScaleLoader
             color="hsla(175, 100%, 37%, 1)"
@@ -73,7 +55,7 @@ export function App() {
             <Filter />
           )}
         </>
-        <ContactList contacts={filteredContacts()} />
+        <ContactList />
       </div>
       <NotificationContainer />
     </div>

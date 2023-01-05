@@ -17,3 +17,6 @@
   background-size: 500% auto;
   margin-bottom: 10px;
 }
+.input:focus {
+  background: white;
+}
